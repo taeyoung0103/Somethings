@@ -1,0 +1,124 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>영화예매</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/babel">
+      "use strict";
+      // 각각의 팝업 컴포넌트
+      class Popup extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            review: "",
+          };
+        }
+
+        handleReviewChange = (event) => {
+          this.setState({
+            review: event.target.value,
+          });
+        };
+
+        handleReviewSubmit = () => {
+          this.props.onReviewSubmit(this.props.movieName, this.state.review);
+          this.props.onClose();
+        };
+
+        render() {
+          const { movieName, onClose } = this.props;
+          return (
+            <div className="popup">
+              <h2>{movieName} 후기 작성</h2>
+              <textarea
+                value={this.state.review}
+                onChange={this.handleReviewChange}
+                placeholder="후기를 작성해주세요"
+              ></textarea>
+              <button onClick={this.handleReviewSubmit}>작성 완료</button>
+              <button onClick={onClose}>닫기</button>
+            </div>
+          );
+        }
+      }
+
+      class MovieList extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            popupVisible: false,
+            selectedMovie: "",
+            reviews: {},
+          };
+        }
+
+        openPopup = (movieName) => {
+          this.setState({
+            popupVisible: true,
+            selectedMovie: movieName,
+          });
+        };
+
+        closePopup = () => {
+          this.setState({
+            popupVisible: false,
+            selectedMovie: "",
+          });
+        };
+
+        handleReviewSubmit = (movieName, review) => {
+          this.setState((prevState) => ({
+            reviews: {
+              ...prevState.reviews,
+              [movieName]: review,
+            },
+          }));
+        };
+
+        render() {
+          const movies = ["A", "B", "C"];
+          const { popupVisible, selectedMovie, reviews } = this.state;
+
+          return (
+            <div>
+              <ul>
+                {movies.map((movie) => (
+                  <li key={movie} onClick={() => this.openPopup(movie)}>
+                    {movie}
+                  </li>
+                ))}
+              </ul>
+              {popupVisible && (
+                <Popup
+                  movieName={selectedMovie}
+                  onClose={this.closePopup}
+                  onReviewSubmit={this.handleReviewSubmit}
+                />
+              )}
+              {Object.keys(reviews).map((movieName) => (
+                <div key={movieName}>
+                  <h3>{movieName} 후기</h3>
+                  <p>{reviews[movieName]}</p>
+                </div>
+              ))}
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<MovieList />, document.querySelector("#root"));
+    </script>
+  </body>
+</html>
