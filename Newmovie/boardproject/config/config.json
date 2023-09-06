@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "taeyoung95!",
+    "database": "todomovie",
+    "host": "127.0.0.1",
+    "dialect": "mariadb"
+  },
+  "test": {
+    "username": "root",
+    "password": "taeyoung95!",
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mariadb"
+  },
+  "production": {
+    "username": "root",
+    "password": "taeyoung95!",
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mariadb"
+  }
+}
